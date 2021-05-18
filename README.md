@@ -1,7 +1,7 @@
 # Pyreact Fastapi
 This project developed with react as FE and Fast API for REST APIs
 
-## Back End developed Fast API
+## Back End developed with Fast API
 Important Modules
 `pip install fastapi`
 
