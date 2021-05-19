@@ -23,6 +23,8 @@ You run the API using `python main.py` on your host with port `8000`
 if __name__ == "__main__":
     uvicorn.run(app='main:app', host="0.0.0.0", port=8000, reload=True, debug=True)
 ```
+
+`#type:ignore` -- this comments helps you to ignore the pylance warning for the custom imports
 ## Front End developed with react
 `$ create-react-app reactfe`
 

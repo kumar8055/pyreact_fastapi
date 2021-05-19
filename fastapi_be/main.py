@@ -6,7 +6,7 @@ import uvicorn
 
 from fastapi.middleware.cors import CORSMiddleware
 ## Custom imports
-from stocks import getStocksInfo,getHistoryData
+from stocks import getStocksInfo,getHistoryData #type:ignore
 
 app = FastAPI()
 
