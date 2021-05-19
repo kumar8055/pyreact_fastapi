@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import {Button,Form} from 'react-bootstrap'
+import {Button,Form,Table} from 'react-bootstrap'
 import Welcome from './components/Welcome'
 
 
@@ -11,7 +11,8 @@ class App extends Component{
     this.state = {
       ticker : "",
       stock: "msft",
-      stocksList: []
+      stocksList: [],
+      historyData: []
     }
 
     // Binding all functions
@@ -37,13 +38,26 @@ class App extends Component{
     .post(`http://localhost:8000/stocks/${ticker}/info`,config)
     .then(res => {  
                   // console.log(res.data);
-                  this.setState({stocksList : res.data})
+                  this.setState(prevState => ({stocksList : [...prevState.stocksList, res.data]}))
                 })
     // .then(res => {console.log(res.data)})
     .catch(err => console.log(err))
   };
 
-  createStock = () =>{
+  refreshHistoryData = (ticker) =>{
+    axios
+    .post(`http://localhost:8000/stocks/${ticker}/history`)
+    .then(res => {
+        this.setState(
+          prevHistData => ({
+              historyData:[...prevHistData.historyData, res.data]
+          })
+          )
+    })
+  };
+
+  createStock = (event) =>{
+    event.preventDefault()
     this.refreshStockList(this.state.ticker)
     const tickers = this.state.stocksList 
     console.log(tickers)
@@ -55,13 +69,21 @@ class App extends Component{
     const tkr = event.target.value
     this.setState({ticker:tkr})
     console.log(this.state.ticker)
-  }
+  };
 
   stockSearch = (event) =>{
     event.preventDefault()
     // const ticker = this.state.ticker
     this.createStock()
+    this.historySearch()
+  };
+
+  historySearch = (event) =>{
+    event.preventDefault()
+    this.refreshHistoryData(this.state.stock)
   }
+
+
 
   render(){
     return(
@@ -72,8 +94,30 @@ class App extends Component{
         {/* <Button variant="primary" onClick={this.createStock}> Win</Button> */}
         {/* {this.state.stocksList.longName} */}
         {/* <h1>{this.state.stocksList.map}</h1> */}
+        
+        <Table striped bordered hover>
+          <thead>
+          <tr>
+            <th>Stock longName</th>
+            <th>Market</th>
+            <th>Phone</th>
+          </tr>
+          </thead>
+          <tbody>
+            {this.state.stocksList.map( 
+              stock => (
+                  <tr>
+                    <td>{stock.longName}</td>
+                    <td>{stock.market}</td>
+                    <td>{stock.phone}</td>
+                  </tr>
+                )
+              )
+            }
+          </tbody>
+        </Table>
 
-        <Form onSubmit={this.stockSearch}>
+        <Form onSubmit={this.createStock}>
           <Form.Group>
             <Form.Label>Enter ticker symbol</Form.Label>
             <Form.Control type="text" placeholder="Ticker Symbol" onChange={this.tickerChange}></Form.Control>
