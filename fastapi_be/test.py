@@ -1,10 +1,49 @@
 import yfinance as yf
 import pandas as pd
 
-data = yf.download("SPY", start="2017-01-01", end="2017-04-30")
-df = pd.DataFrame(data, columns=("Open","High","Low","Close","Adj","Close","Volume"))
-print(df.Open.to_json())
+# data = yf.download("SPY", start="2017-01-01", end="2017-04-30")
+# df = pd.DataFrame(data, columns=("Open","High","Low","Close","Adj","Close","Volume"))
+# print(df.Open.to_json())
 # print(df.to_dict())
+
+## Moving Average 
+# data = yf.download("SPY", interval="1d")["Close"][-10:].mean()
+# print(data)
+
+# data = yf.download("SPY", start="2017-01-01", end="2017-04-30",interval="1d")
+# print(data.shape[0])
+# print(data["Close"].to_json())
+# date_keys = [key for key, value in (data["Close"].to_json()).items()]
+# print(data["Close"].to_dict().keys())
+    # ma = [value[i-200:i].mean() for i in range(0, data.shape[0]+1)]
+
+
+# msft = yf.Ticker("MSFT")
+# data = msft.history(period = "5d", interval = "1h")
+# print(data["Date"][])
+
+
+msft = yf.Ticker("MSFT")
+df = msft.history(period = "5d", interval = "1h")
+df.reset_index(inplace = True)
+print(df["Date"][0])
+print(df["Date"][1])
+print(df["Date"][2])
+
+
+
+# ma = [data["Close"][i-200:i].mean() for i in range(0, data.shape[0]+1)]
+# print(ma)
+# print(data["Date"].to_list())
+
+
+# df = yahoo_fin.stock_info.get_data('a', interval='1d')
+# moving_average = [df['close'][i-50:i].mean() for i in range(50, df.shape[0]+1)]
+
+# import yahoo_fin
+# from yahoo_fin import stock_info
+# yahoo_fin.stock_info.get_data('a', interval='1d')['close'][-50:].mean()
+
 
 # for x in data:
 #     # print({"Date":x.Date})

@@ -6,7 +6,7 @@ import uvicorn
 
 from fastapi.middleware.cors import CORSMiddleware
 ## Custom imports
-from stocks import getStocksInfo,getHistoryData #type:ignore
+from stocks import getStocksInfo,getHistoryData,getTickerDates #type:ignore
 
 app = FastAPI()
 
@@ -123,7 +123,12 @@ def stocksInfo(ticker:str, tkr: Ticker):
 @app.post("/stocks/{ticker}/history")
 def stocksHistory(ticker:str):
     hist_data = getHistoryData(ticker)
-    return {**hist_data}
+    return {ticker: hist_data}
+
+@app.post("/stocks/{ticker}/dates")
+def stocksHistory(ticker:str):
+    ticker_dates = getTickerDates(ticker)
+    return {ticker: ticker_dates}
 
 if __name__ == "__main__":
     uvicorn.run(app='main:app', host="0.0.0.0", port=8000, reload=True, debug=True)

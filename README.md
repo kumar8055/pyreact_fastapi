@@ -69,6 +69,7 @@ Happy hacking!
 - `yarn add axios`
 - `yarn add react-bootstrap`
 - `yarn add bootstrap@4.6.0`
+- `yarn add react-chartjs-2 chart.js` -- for charts
 
 After the bootstrap and react-bootstrap libraries, Add the sytlesheets and react-bootstrap related javascript files in the `index.html` 
 

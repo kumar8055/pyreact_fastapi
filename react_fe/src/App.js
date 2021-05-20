@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
-import axios from 'axios'
-import {Button,Form,Table} from 'react-bootstrap'
-import Welcome from './components/Welcome'
+import React, { Component } from 'react';
+import axios from 'axios';
+import {Button,Form,Table} from 'react-bootstrap';
+import Welcome from './components/Welcome';
+import TestChart from './components/TestChart';
 
 
 class App extends Component{
@@ -20,10 +21,13 @@ class App extends Component{
     this.refreshStockList = this.refreshStockList.bind(this)
     this.stockSearch = this.stockSearch.bind(this)
     this.tickerChange = this.tickerChange.bind(this)
+    this.refreshHistoryData = this.refreshHistoryData.bind(this)
+    this.historySearch = this.historySearch.bind(this)
   }
 
   componentDidMount() {
     this.refreshStockList(this.state.stock);
+    this.refreshHistoryData(this.state.stock);
   }
 
   refreshStockList =  (ticker) =>{
@@ -38,7 +42,11 @@ class App extends Component{
     .post(`http://localhost:8000/stocks/${ticker}/info`,config)
     .then(res => {  
                   // console.log(res.data);
-                  this.setState(prevState => ({stocksList : [...prevState.stocksList, res.data]}))
+                  this.setState(
+                      prevState => (
+                        {stocksList : [...prevState.stocksList, res.data]}
+                        )
+                      )
                 })
     // .then(res => {console.log(res.data)})
     .catch(err => console.log(err))
@@ -49,16 +57,18 @@ class App extends Component{
     .post(`http://localhost:8000/stocks/${ticker}/history`)
     .then(res => {
         this.setState(
-          prevHistData => ({
-              historyData:[...prevHistData.historyData, res.data]
-          })
+          prevState => (
+              {historyData:[...prevState.historyData, res.data]}
+            )
           )
     })
+    .catch(err => console.log(err))
   };
 
   createStock = (event) =>{
     event.preventDefault()
     this.refreshStockList(this.state.ticker)
+    this.refreshHistoryData(this.state.ticker)
     const tickers = this.state.stocksList 
     console.log(tickers)
     return tickers
@@ -80,7 +90,7 @@ class App extends Component{
 
   historySearch = (event) =>{
     event.preventDefault()
-    this.refreshHistoryData(this.state.stock)
+    this.refreshHistoryData(this.state.ticker)
   }
 
 
@@ -125,6 +135,7 @@ class App extends Component{
           <Button variant="success" type="submit">Stock Info</Button>
         </Form>
       </header>
+      <TestChart />
     </div>
     )
   }
